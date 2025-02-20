@@ -1,0 +1,172 @@
+<%@ page import="java.util.*, com.example.web3012a1.Todo" %>
+        <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+        <html>
+        <head>
+            <title>Todo List</title>
+            <!-- Using Bootstrap for styling -->
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        </head>
+        <body class="bg-light">
+
+        <div class="container mt-5">
+            <div class="card shadow-lg">
+                <div class="card-header text-white" style="background-color: antiquewhite;">
+                    <!-- Display "Editing Todo" if editing, otherwise "Todo Application" -->
+                    <h2 class="mb-0"><%= (request.getParameter("id") != null) ? "Editing Todo" : "Todo Application" %></h2>
+                </div>
+                <div class="card-body">
+                    <!-- For editable todos -->
+                    <%
+                        Todo todoToEdit = null;
+                        if (request.getParameter("id") != null) {
+                            int editId = Integer.parseInt(request.getParameter("id"));
+                            List<Todo> todoList = (List<Todo>) request.getAttribute("todos");
+                            if (todoList != null) {
+                                for (Todo t : todoList) {
+                                    if (t.id() == editId) {
+                                        todoToEdit = t;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    %>
+
+                    <!-- Use todoToEdit to determine if we'll use add or update action -->
+                    <form action="todo" method="post">
+                        <% if (todoToEdit != null) { %>
+                        <input type="hidden" name="action" value="update">
+                        <input type="hidden" name="id" value="<%= todoToEdit.id() %>">
+                        <% } else { %>
+                        <input type="hidden" name="action" value="add">
+                        <% } %>
+
+                        <!-- Fill in information/leave it empty depending on if todoToEdit is not null or not -->
+                        <div class="mb-3">
+                            <label class="form-label">Title</label>
+                            <input type="text" class="form-control" name="title" value="<%= (todoToEdit != null) ? todoToEdit.title() : "" %>" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <input type="text" class="form-control" name="description" value="<%= (todoToEdit != null) ? todoToEdit.description() : "" %>">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" name="status">
+                                <option value="Pending" <%= (todoToEdit != null && "Pending".equals(todoToEdit.status())) ? "selected" : "" %>>Pending</option>
+                                <option value="Completed" <%= (todoToEdit != null && "Completed".equals(todoToEdit.status())) ? "selected" : "" %>>Completed</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-success"xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+                            <modelVersion>4.0.0</modelVersion>
+                            <groupId>com.example</groupId>
+                            <artifactId>WEB3102_A1</artifactId>
+                            <version>1.0-SNAPSHOT</version>
+                            <name>WEB3102_A1</name>
+                            <packaging>war</packaging>
+                            <properties>
+                                <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+                                <maven.compiler.source>22</maven.compiler.source>
+                                <junit.version>5.11.0</junit.version>
+                            </properties>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>jakarta.servlet</groupId>
+                                    <artifactId>jakarta.servlet-api</artifactId>
+                                    <version>6.1.0</version>
+                                    <scope>provided</scope>
+                                </dependency>
+                                <dependency>
+                                    <groupId>org.junit.jupiter</groupId>
+                                    <artifactId>junit-jupiter-api</artifactId>
+                                    <version>${junit.version}</version>
+                                    <scope>test</scope>
+                                </dependency>
+                                <dependency>
+                                    <groupId>org.junit.jupiter</groupId>
+                                    <artifactId>junit-jupiter-engine</artifactId>
+                                    <version>${junit.version}</version>
+                                    <scope>test</scope>
+                                </dependency>
+                                <dependency>
+                                    <groupId>mysql</groupId>
+                                    <artifactId>mysql-connector-java</artifactId>
+                                    <version>8.0.33</version>
+                                </dependency>
+                            </dependencies>
+                            <build>
+                                <plugins>
+                                    <plugin>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-war-plugin</artifactId>
+                                        <version>3.4.0</version>
+                                    </plugin>
+                                </plugins>
+                            </build>
+                        </project>><%= (todoToEdit != null) ? "Update Todo" : "Add Todo" %></button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="mt-4 card shadow-lg">
+                <div class="card-header bg-secondary text-white">
+                    <h3 class="mb-0">Tasks</h3>
+                </div>
+                <div class="card-body">
+                    <!-- Fill in table with info -->
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <%
+                            List<Todo> todos = (List<Todo>) request.getAttribute("todos");
+                            if (todos != null) {
+                                for (Todo t : todos) {
+                        %>
+                        <tr>
+                            <td><%= t.id() %></td>
+                            <td><%= t.title() %></td>
+                            <td><%= t.description() %></td>
+                            <td>
+                                <span class="badge bg-<%= t.status().equals("Completed") ? "success" : "warning" %>">
+                                    <%= t.status() %>
+                                </span>
+                            </td>
+                            <td>
+                                <!-- Form to delete a todo -->
+                                <form action="todo" method="post" class="d-inline">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="id" value="<%= t.id() %>">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+
+                                <!-- Form to edit a todo -->
+                                <form action="todo" method="get" class="d-inline">
+                                    <input type="hidden" name="id" value="<%= t.id() %>">
+                                    <button type="submit" class="btn btn-warning btn-sm">Edit</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <% }} %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bootstrap JS bundle -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+        </body>
+        </html>

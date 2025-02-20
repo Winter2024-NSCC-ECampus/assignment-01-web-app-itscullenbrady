@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <project xmlns="http://maven.apache.org/POM/4.0.0"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+        <!-- Model version for POM -->
+        <modelVersion>4.0.0</modelVersion>
+
+        <!-- Group ID for the project -->
+        <groupId>com.example</groupId>
+        <!-- Artifact ID for the project -->
+        <artifactId>WEB3102_A1</artifactId>
+        <!-- Version of the project -->
+        <version>1.0-SNAPSHOT</version>
+        <!-- Name of the project -->
+        <name>WEB3102_A1</name>
+        <!-- Packaging type -->
+        <packaging>war</packaging>
+
+        <properties>
+            <!-- Encoding for the project -->
+            <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+            <!-- Java compiler target version -->
+            <maven.compiler.target>22</maven.compiler.target>
+            <!-- Java compiler source version -->
+            <maven.compiler.source>22</maven.compiler.source>
+            <!-- JUnit version for testing -->
+            <junit.version>5.11.0</junit.version>
+        </properties>
+
+        <dependencies>
+            <!-- Dependency for Jakarta Servlet API -->
+            <dependency>
+                <groupId>jakarta.servlet</groupId>
+                <artifactId>jakarta.servlet-api</artifactId>
+                <version>6.1.0</version>
+                <scope>provided</scope>
+            </dependency>
+            <!-- Dependency for JUnit Jupiter API -->
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- Dependency for JUnit Jupiter Engine -->
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- Dependency for MySQL Connector -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>8.0.33</version>
+            </dependency>
+        </dependencies>
+
+        <build>
+            <plugins>
+                <!-- Plugin for building WAR files -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>3.4.0</version>
+                </plugin>
+            </plugins>
+        </build>
+    </project>
